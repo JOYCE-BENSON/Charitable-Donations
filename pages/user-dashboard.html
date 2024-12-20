@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard - CharityConnect</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body class="bg-light">
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="../index.html">CharityConnect</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="donation-list.html">
+                            <i class="bi bi-search"></i> Find Help
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle"></i> Profile
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#editProfileModal">Edit Profile</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" onclick="auth.logout()">Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container" style="margin-top: 80px;">
+        <!-- Status Cards -->
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="card bg-primary text-white">
+                    <div class="card-body">
+                        <h5 class="card-title">Total Requests</h5>
+                        <h2 class="card-text" id="totalRequests">0</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card bg-warning text-white">
+                    <div class="card-body">
+                        <h5 class="card-title">Pending Requests</h5>
+                        <h2 class="card-text" id="pendingRequests">0</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card bg-success text-white">
+                    <div class="card-body">
+                        <h5 class="card-title">Approved Requests</h5>
+                        <h2 class="card-text" id="approvedRequests">0</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Active Requests Section -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">Your Active Requests</h5>
+            </div>
+            <div class="card-body">
+                <div id="activeRequestsList" class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Request Date</th>
+                                <th>Donation Title</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="activeRequestsTableBody">
+                            <!-- Active requests will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Available Donations -->
+        <div class="card shadow-lg border-0">
+            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                <h5 class="mb-0 font-weight-bold">
+                    <i class="fas fa-hand-holding-heart"></i> Available Donations
+                </h5>
+                <a href="donation-list.html" class="btn btn-light btn-sm text-primary font-weight-bold">
+                    View All <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+            <div class="card-body">
+                <p class="text-secondary">
+                    Explore a list of generous contributions made by our members. Click on "View All" to see a detailed breakdown of all available donations. You can also browse through specific donations in the list below and learn how they contribute to our community's welfare.
+                </p>
+                <div class="row mt-3" id="availableDonationsList">
+                    <!-- Available donations will be dynamically loaded here -->
+                    <div class="col-12 text-center">
+                        <p class="text-muted">Loading donations... Please wait.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer bg-light text-center">
+                <p class="mb-0">
+                    Want to contribute? <a href="donation-form.html" class="text-primary font-weight-bold">Click here</a> to make your donation and help build a stronger community.
+                </p>
+            </div>
+        </div>
+        
+    </div>
+
+    <!-- Edit Profile Modal -->
+    <div class="modal fade" id="editProfileModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Profile</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editProfileForm">
+                        <div class="mb-3">
+                            <label for="editFullName" class="form-label">Full Name</label>
+                            <input type="text" class="form-control" id="editFullName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editPhone" class="form-label">Phone Number</label>
+                            <input type="tel" class="form-control" id="editPhone" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editAddress" class="form-label">Address</label>
+                            <textarea class="form-control" id="editAddress" rows="2" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editBio" class="form-label">Bio</label>
+                            <textarea class="form-control" id="editBio" rows="3"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="updateProfile()">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/auth.js"></script>
+    <script src="../assets/js/donations.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            if (!auth.isAuthenticated()) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Load dashboard data
+            await loadDashboardData();
+            
+            // Load user profile data
+            loadProfileData();
+        });
+
+        async function loadDashboardData() {
+            try {
+                const requests = await donationManager.listRequests({ userId: auth.getCurrentUser().id });
+                
+                // Update statistics
+                document.getElementById('totalRequests').textContent = requests.length;
+                document.getElementById('pendingRequests').textContent = requests.filter(r => r.status === 'pending').length;
+                document.getElementById('approvedRequests').textContent = requests.filter(r => r.status === 'approved').length;
+
+                // Load active requests
+                await loadActiveRequests(requests);
+
+                // Load available donations
+                await loadAvailableDonations();
+            } catch (error) {
+                showError(error.message);
+            }
+        }
+
+        async function loadActiveRequests(requests) {
+    const tableBody = document.getElementById('activeRequestsTableBody');
+    
+    tableBody.innerHTML = requests
+        .filter(request => request.status !== 'rejected')
+        .map(request => `
+            <tr>
+                <td>${new Date(request.createdAt).toLocaleDateString()}</td>
+                <td>${request.donation.title}</td>
+                <td>KSh ${request.donation.amount.toLocaleString('en-KE')}</td>
+                <td><span class="badge bg-${getStatusBadgeColor(request.status)}">${request.status}</span></td>
+                <td>
+                    ${request.status === 'approved' ? `
+                        <button class="btn btn-sm btn-success" onclick="confirmReceipt('${request.id}')">
+                            Confirm Receipt
+                        </button>
+                    ` : ''}
+                    ${request.status === 'pending' ? `
+                        <button class="btn btn-sm btn-danger" onclick="cancelRequest('${request.id}')">
+                            Cancel
+                        </button>
+                    ` : ''}
+                </td>
+            </tr>
+        `).join('');
+}
+
+async function loadAvailableDonations() {
+    try {
+        const donations = await donationManager.listDonations({ status: 'available' });
+        const container = document.getElementById('availableDonationsList');
+        
+        container.innerHTML = donations.slice(0, 3).map(donation => `
+            <div class="col-md-4 mb-3">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">${donation.title}</h5>
+                        <p class="card-text">${donation.description}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="badge bg-${getCategoryBadgeColor(donation.category)}">${donation.category}</span>
+                            <strong>KSh ${donation.amount.toLocaleString('en-KE')}</strong>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-transparent">
+                        <a href="request-donation.html?id=${donation.id}" class="btn btn-primary w-100">Request Support</a>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    } catch (error) {
+        showError(error.message);
+    }
+}
+
+        function getStatusBadgeColor(status) {
+            switch (status) {
+                case 'approved': return 'success';
+                case 'pending': return 'warning';
+                case 'rejected': return 'danger';
+                default: return 'secondary';
+            }
+        }
+
+        function getCategoryBadgeColor(category) {
+    const colors = {
+        medical: 'danger',
+        education: 'info',
+        disaster: 'warning',
+        business: 'success',
+        food: 'primary',
+        housing: 'secondary'
+    };
+    return colors[category] || colors.default;
+}
+
+        async function confirmReceipt(requestId) {
+            try {
+                await donationManager.updateRequestStatus(requestId, 'completed');
+                await loadDashboardData();
+                showSuccess('Receipt confirmed successfully');
+            } catch (error) {
+                showError(error.message);
+            }
+        }
+
+        async function cancelRequest(requestId) {
+            if (confirm('Are you sure you want to cancel this request?')) {
+                try {
+                    await donationManager.updateRequestStatus(requestId, 'cancelled');
+                    await loadDashboardData();
+                    showSuccess('Request cancelled successfully');
+                } catch (error) {
+                    showError(error.message);
+                }
+            }
+        }
+
+        function loadProfileData() {
+            const user = auth.getCurrentUser();
+            document.getElementById('editFullName').value = user.profile.fullName;
+            document.getElementById('editPhone').value = user.profile.phone;
+            document.getElementById('editAddress').value = user.profile.address;
+            document.getElementById('editBio').value = user.profile.bio || '';
+        }
+
+        async function updateProfile() {
+            try {
+                const profileData = {
+                    fullName: document.getElementById('editFullName').value,
+                    phone: document.getElementById('editPhone').value,
+                    address: document.getElementById('editAddress').value,
+                    bio: document.getElementById('editBio').value
+                };
+
+                await auth.updateProfile(profileData);
+                
+                const modal = bootstrap.Modal.getInstance(document.getElementById('editProfileModal'));
+                modal.hide();
+                
+                showSuccess('Profile updated successfully');
+            } catch (error) {
+                showError(error.message);
+            }
+        }
+
+        function showSuccess(message) {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = 'alert alert-success alert-dismissible fade show';
+            alertDiv.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            
+            document.querySelector('.container').insertAdjacentElement('afterbegin', alertDiv);
+            
+            setTimeout(() => alertDiv.remove(), 5000);
+        }
+    </script>
+</body>
+</html>

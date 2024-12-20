@@ -5,136 +5,364 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - CharityConnect</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/assets/css/style.css">
-</head>
-<body class="bg-light">
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top">
-        <div class="container">
-            <a class="navbar-brand" href="/index.html">CharityConnect</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/index.html">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link btn btn-primary" href="register.html">Register</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --primary-color: #4a90e2;
+            --secondary-color: #5fcf80;
+            --background-light: #f4f7f6;
+            --text-dark: #2c3e50;
+        }
 
-    <!-- Login Form -->
-    <div class="container" style="margin-top: 100px;">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="card shadow-sm">
-                    <div class="card-body p-5">
-                        <h2 class="text-center mb-4">Welcome Back</h2>
-                        
-                        <form id="loginForm" onsubmit="handleLogin(event)">
-                            <div class="mb-3">
-                                <label for="email" class="form-label">Email address</label>
-                                <input type="email" class="form-control" id="email" required>
-                            </div>
-                            
-                            <div class="mb-3">
-                                <label for="password" class="form-label">Password</label>
-                                <input type="password" class="form-control" id="password" required>
-                            </div>
-                            
-                            <div class="mb-3 form-check">
-                                <input type="checkbox" class="form-check-input" id="rememberMe">
-                                <label class="form-check-label" for="rememberMe">Remember me</label>
-                            </div>
-                            
-                            <div class="d-grid">
-                                <button type="submit" class="btn btn-primary">Login</button>
-                            </div>
-                        </form>
-                        
-                        <div class="text-center mt-4">
-                            <p class="mb-0">Don't have an account? <a href="register.html">Register here</a></p>
-                            <a href="#" class="text-muted">Forgot your password?</a>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            background-color: var(--background-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        .login-container {
+            display: flex;
+            min-height: 100vh;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 0;
+        }
+
+        .login-card {
+            border: none;
+            border-radius: 16px;
+            box-shadow: 0 10px 35px rgba(0,0,0,0.1);
+            overflow: hidden;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .login-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .login-header h2 {
+            margin: 0;
+            font-weight: 600;
+        }
+
+        .login-body {
+            padding: 2.5rem;
+            background: white;
+        }
+
+        .form-control {
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            border-color: #e0e0e0;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.25rem rgba(74, 144, 226, 0.25);
+        }
+
+        .btn-login {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border: none;
+            padding: 0.75rem;
+            font-weight: 600;
+            transition: transform 0.2s;
+        }
+
+        .btn-login:hover {
+            transform: translateY(-3px);
+            filter: brightness(1.1);
+        }
+
+        .form-check-input:checked {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .position-relative .show-password {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #6c757d;
+            transition: color 0.3s;
+        }
+
+        .show-password:hover {
+            color: var(--text-dark);
+        }
+
+        .login-footer {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: #6c757d;
+        }
+
+        @media (max-width: 768px) {
+            .login-card {
+                margin: 1rem;
+                width: calc(100% - 2rem);
+            }
+            
+            .login-body {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <h2>CharityConnect</h2>
+                <p class="mb-0">Empowering Change, One Connection at a Time</p>
+            </div>
+            
+            <div class="login-body">
+                <div id="alertPlaceholder"></div>
+                
+                <form id="loginForm">
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email address</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                            <input type="email" class="form-control" id="email" placeholder="Enter your email" required>
                         </div>
                     </div>
+                    
+                    <div class="mb-3 position-relative">
+                        <label for="password" class="form-label">Password</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                            <input type="password" class="form-control" id="password" placeholder="Enter your password" required>
+                            <i class="bi bi-eye-slash show-password" id="togglePassword"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3 d-flex justify-content-between align-items-center">
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="rememberMe">
+                            <label class="form-check-label" for="rememberMe">Remember me</label>
+                        </div>
+                        <a href="#" class="text-primary">Forgot password?</a>
+                    </div>
+                    
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-login text-white" id="loginButton">
+                            <span id="loginText">Login</span>
+                            <span id="loginSpinner" class="spinner-border spinner-border-sm d-none" role="status"></span>
+                        </button>
+                    </div>
+                </form>
+                
+                <div class="login-footer">
+                    <p class="mb-2">Don't have an account? <a href="register.html" class="text-primary">Register here</a></p>
+                    <small class="text-muted">&copy; 2024 CharityConnect. All rights reserved.</small>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Footer -->
-    <footer class="bg-dark text-light py-4 mt-5">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6">
-                    <h5>CharityConnect</h5>
-                    <p>Making the world a better place, one connection at a time.</p>
-                </div>
-                <div class="col-md-3">
-                    <h5>Quick Links</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="/index.html#how-it-works">How It Works</a></li>
-                        <li><a href="/index.html#impact">Our Impact</a></li>
-                        <li><a href="register.html">Register</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-3">
-                    <h5>Contact Us</h5>
-                    <ul class="list-unstyled">
-                        <li>Email: support@charityconnect.com</li>
-                        <li>Phone: (555) 123-4567</li>
-                    </ul>
-                </div>
-            </div>
-            <hr>
-            <div class="text-center">
-                <p>&copy; 2024 CharityConnect. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
     <script>
-        async function handleLogin(e) {
-            e.preventDefault();
-            
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
+        // Authentication Class for CharityConnect
+        class Auth {
+            constructor() {
+                this.baseURL = 'http://localhost:3000';
+                this.token = localStorage.getItem('token');
+                this.user = JSON.parse(localStorage.getItem('user'));
+            }
 
-            try {
-                // Fetch user from json-server
-                const response = await fetch(`http://localhost:3000/users?email=${email}`);
-                const users = await response.json();
+            // Login method with improved error handling
+            async login(email, password, rememberMe = false) {
+                try {
+                    // Validate input
+                    if (!email || !password) {
+                        throw new Error('Please enter both email and password');
+                    }
 
-                if (users.length === 0) {
-                    throw new Error('User not found');
+                    // Fetch user by email
+                    const response = await fetch(`${this.baseURL}/users?email=${encodeURIComponent(email)}`);
+                    
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+
+                    const users = await response.json();
+
+                    if (users.length === 0) {
+                        throw new Error('User not found. Please check your email.');
+                    }
+
+                    const user = users[0];
+
+                    // Basic password comparison (replace with proper hashing in production)
+                    if (user.password !== password) {
+                        throw new Error('Invalid password. Please try again.');
+                    }
+
+                    // Generate a simple token (replace with proper JWT in production)
+                    const token = btoa(`${user.email}:${Date.now()}`);
+
+                    // Set session with optional remember me
+                    this.setSession(token, user, rememberMe);
+
+                    // Return login result with redirect URL
+                    return {
+                        success: true,
+                        user: user,
+                        redirectUrl: this.getRedirectUrl(user.userType),
+                        token: token
+                    };
+                } catch (error) {
+                    console.error('Login error:', error);
+                    
+                    // Standardize error message
+                    throw new Error(error.message || 'Login failed. Please try again.');
+                }
+            }
+
+            // Determine redirect URL based on user type
+            getRedirectUrl(userType) {
+                switch(userType) {
+                    case 'donor':
+                        return 'donor-dashboard.html';
+                    default:
+                        return 'user-dashboard.html';
+                }
+            }
+
+            // Set session data
+            setSession(token, user, rememberMe = false) {
+                // If remember me is true, persist data longer
+                if (rememberMe) {
+                    // Extended expiry (7 days)
+                    const expiryDate = new Date();
+                    expiryDate.setDate(expiryDate.getDate() + 7);
+                    localStorage.setItem('tokenExpiry', expiryDate.getTime().toString());
                 }
 
-                const user = users[0];
-                if (user.password !== password) {
-                    throw new Error('Invalid password');
-                }
-
-                // Store user data in localStorage
+                // Store authentication data
+                localStorage.setItem('token', token);
                 localStorage.setItem('user', JSON.stringify(user));
-                localStorage.setItem('token', btoa(user.email + ':' + new Date().getTime()));
+                
+                // Update instance properties
+                this.token = token;
+                this.user = user;
+            }
 
-                // Redirect based on user type
-                if (user.userType === 'donor') {
-                    window.location.href = '/donor-dashboard.html';
-                } else {
-                    window.location.href = '/user-dashboard.html';
+            // Logout method
+            logout() {
+                // Clear local storage
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+                localStorage.removeItem('tokenExpiry');
+
+                // Reset instance properties
+                this.token = null;
+                this.user = null;
+
+                // Redirect to home page
+                window.location.href = '/index.html';
+            }
+
+            // Check authentication status
+            isAuthenticated() {
+                // Check if token exists
+                if (!this.token) return false;
+
+                // Check token expiry
+                const expiryTime = localStorage.getItem('tokenExpiry');
+                if (expiryTime) {
+                    const currentTime = new Date().getTime();
+                    if (currentTime > parseInt(expiryTime)) {
+                        // Token expired, logout
+                        this.logout();
+                        return false;
+                    }
                 }
-            } catch (error) {
-                alert('Login failed: ' + error.message);
+
+                return true;
+            }
+
+            // Get the currently logged-in user
+            getCurrentUser() {
+                return this.isAuthenticated() ? this.user : null;
             }
         }
+
+        // Initialize the Auth instance globally
+        const auth = new Auth();
+
+        // Error handling utility
+        function showError(message, containerSelector = '#alertPlaceholder') {
+            const alertPlaceholder = document.querySelector(containerSelector);
+            if (!alertPlaceholder) return;
+
+            alertPlaceholder.innerHTML = `
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="bi bi-exclamation-circle me-2"></i>
+                    ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            `;
+        }
+
+        // Login form handler
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const loginButton = document.getElementById('loginButton');
+            const loginText = document.getElementById('loginText');
+            const loginSpinner = document.getElementById('loginSpinner');
+            const alertPlaceholder = document.getElementById('alertPlaceholder');
+            
+            // Reset previous alerts
+            if (alertPlaceholder) alertPlaceholder.innerHTML = '';
+            
+            // Update UI state
+            loginButton.disabled = true;
+            loginText.textContent = 'Logging in...';
+            loginSpinner.classList.remove('d-none');
+            
+            try {
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+                const rememberMe = document.getElementById('rememberMe').checked;
+                
+                const result = await auth.login(email, password, rememberMe);
+                
+                // Redirect to appropriate dashboard
+                window.location.replace(result.redirectUrl);
+            } catch (error) {
+                // Show error message
+                showError(error.message);
+                
+                // Reset button state
+                loginButton.disabled = false;
+                loginText.textContent = 'Login';
+                loginSpinner.classList.add('d-none');
+            }
+        });
+
+        // Show/hide password
+        const togglePassword = document.getElementById('togglePassword');
+        const passwordInput = document.getElementById('password');
+
+        togglePassword.addEventListener('click', () => {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            togglePassword.classList.toggle('bi-eye');
+            togglePassword.classList.toggle('bi-eye-slash');
+        });
     </script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
