@@ -1,0 +1,17 @@
+{
+  "name": "charitable-donations",
+  "version": "1.0.0",
+  "description": "A transparent and efficient charitable donations platform",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx json-server --watch db.json",
+    "dev": "live-server --port=8080"
+  },
+  "dependencies": {
+    "bootstrap": "^5.3.0",
+    "json-server": "^0.17.4"
+  },
+  "devDependencies": {
+    "live-server": "^1.2.1"
+  }
+}

@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donor Dashboard - CharityConnect</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+    <style>
+        /* Dashboard specific styles */
+        .card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .bg-primary, .bg-success, .bg-info {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bg-primary::after, .bg-success::after, .bg-info::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100px;
+            height: 100%;
+            background: rgba(255,255,255,0.1);
+            transform: skewX(-15deg);
+            pointer-events: none;
+        }
+
+        .card-text {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .table td {
+            vertical-align: middle;
+            padding: 1rem;
+        }
+
+        .badge {
+            padding: 0.5em 1em;
+        }
+
+        .alert {
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .card-text {
+                font-size: 2rem;
+            }
+            
+            .table td {
+                padding: 0.75rem;
+            }
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="/index.html">CharityConnect</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/create-donation.html">
+                            <i class="bi bi-plus-circle"></i> Create Donation
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle"></i> <span id="userFullName">Loading...</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#editProfileModal">Edit Profile</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" onclick="logout()">Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container" style="margin-top: 80px;">
+        <!-- Overview Cards -->
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="card bg-primary text-white">
+                    <div class="card-body">
+                        <h5 class="card-title">Total Donations</h5>
+                        <h2 class="card-text" id="totalDonations">0</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card bg-success text-white">
+                    <div class="card-body">
+                        <h5 class="card-title">Active Donations</h5>
+                        <h2 class="card-text" id="activeDonations">0</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card bg-info text-white">
+                    <div class="card-body">
+                        <h5 class="card-title">Completed Donations</h5>
+                        <h2 class="card-text" id="completedDonations">0</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pending Requests Section -->
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Pending Requests</h5>
+                <button class="btn btn-sm btn-outline-primary" onclick="loadPendingRequests()">
+                    <i class="bi bi-arrow-clockwise"></i> Refresh
+                </button>
+            </div>
+            <div class="card-body">
+                <div id="pendingRequestsList" class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Request Date</th>
+                                <th>Requester</th>
+                                <th>Donation Title</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="requestsTableBody">
+                            <!-- Requests will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Donations -->
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Your Recent Donations</h5>
+            </div>
+            <div class="card-body">
+                <div id="recentDonationsList">
+                    <!-- Donations will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Profile Modal -->
+    <div class="modal fade" id="editProfileModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Profile</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editProfileForm">
+                        <div class="mb-3">
+                            <label for="editFullName" class="form-label">Full Name</label>
+                            <input type="text" class="form-control" id="editFullName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editPhone" class="form-label">Phone Number</label>
+                            <input type="tel" class="form-control" id="editPhone" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editAddress" class="form-label">Address</label>
+                            <textarea class="form-control" id="editAddress" rows="2" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editBio" class="form-label">Bio</label>
+                            <textarea class="form-control" id="editBio" rows="3"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="updateProfile()">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Check authentication on page load
+        document.addEventListener('DOMContentLoaded', async () => {
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (!user) {
+                window.location.href = '/pages/login.html';
+                return;
+            }
+
+            // Update UI with user data
+            document.getElementById('userFullName').textContent = user.fullName || user.email;
+            await loadDashboardData();
+            loadProfileData();
+        });
+
+        async function loadDashboardData() {
+            try {
+                const user = JSON.parse(localStorage.getItem('user'));
+                const response = await fetch(`http://localhost:3000/donations?donorId=${user.id}`);
+                const donations = await response.json();
+                
+                // Update statistics
+                document.getElementById('totalDonations').textContent = donations.length;
+                document.getElementById('activeDonations').textContent = 
+                    donations.filter(d => d.status === 'available').length;
+                document.getElementById('completedDonations').textContent = 
+                    donations.filter(d => d.status === 'completed').length;
+
+                // Load recent donations
+                displayRecentDonations(donations.slice(0, 5));
+                
+                // Load pending requests
+                await loadPendingRequests();
+            } catch (error) {
+                showError('Failed to load dashboard data: ' + error.message);
+            }
+        }
+
+        async function loadPendingRequests() {
+    try {
+        const user = JSON.parse(localStorage.getItem('user'));
+        const response = await fetch(`http://localhost:3000/requests?status=pending`);
+        const requests = await response.json();
+        
+        const tableBody = document.getElementById('requestsTableBody');
+        if (requests.length === 0) {
+            tableBody.innerHTML = '<tr><td colspan="6" class="text-center">No pending requests</td></tr>';
+            return;
+        }
+
+        // Fetch related user and donation data
+        const requestsWithDetails = await Promise.all(requests.map(async request => {
+            const [userResponse, donationResponse] = await Promise.all([
+                fetch(`http://localhost:3000/users/${request.userId}`),
+                fetch(`http://localhost:3000/donations/${request.donationId}`)
+            ]);
+            const [user, donation] = await Promise.all([
+                userResponse.json(),
+                donationResponse.json()
+            ]);
+            return { ...request, user, donation };
+        }));
+
+        tableBody.innerHTML = requestsWithDetails.map(request => `
+            <tr>
+                <td>${new Date(request.createdAt).toLocaleDateString()}</td>
+                <td>${request.user.fullName}</td>
+                <td>${request.donation.title}</td>
+                <td>KSh ${request.donation.amount.toLocaleString('en-KE')}</td>
+                <td><span class="badge bg-warning">Pending</span></td>
+                <td>
+                    <button class="btn btn-sm btn-success" onclick="approveRequest('${request.id}')">
+                        Approve
+                    </button>
+                    <button class="btn btn-sm btn-danger" onclick="rejectRequest('${request.id}')">
+                        Reject
+                    </button>
+                </td>
+            </tr>
+        `).join('');
+    } catch (error) {
+        showError('Failed to load requests: ' + error.message);
+    }
+}
+
+function displayRecentDonations(donations) {
+    const container = document.getElementById('recentDonationsList');
+    if (donations.length === 0) {
+        container.innerHTML = '<p class="text-center">No donations yet</p>';
+        return;
+    }
+    
+    container.innerHTML = donations.map(donation => `
+        <div class="card mb-3">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="card-title">${donation.title}</h5>
+                    <span class="badge bg-${getStatusBadgeColor(donation.status)}">
+                        ${donation.status}
+                    </span>
+                </div>
+                <p class="card-text">${donation.description}</p>
+                <div class="d-flex justify-content-between align-items-center">
+                    <small class="text-muted">Created on ${new Date(donation.createdAt).toLocaleDateString()}</small>
+                    <strong>KSh ${donation.amount.toLocaleString('en-KE')}</strong>
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+        function getStatusBadgeColor(status) {
+            const colors = {
+                available: 'success',
+                completed: 'primary',
+                pending: 'warning',
+                cancelled: 'danger'
+            };
+            return colors[status] || 'secondary';
+        }
+
+        async function approveRequest(requestId) {
+            try {
+                const response = await fetch(`http://localhost:3000/requests/${requestId}`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        status: 'approved',
+                        updatedAt: new Date().toISOString()
+                    })
+                });
+
+                if (!response.ok) throw new Error('Failed to approve request');
+                
+                await loadDashboardData();
+                showSuccess('Request approved successfully');
+            } catch (error) {
+                showError('Failed to approve request: ' + error.message);
+            }
+        }
+
+        async function rejectRequest(requestId) {
+            try {
+                const response = await fetch(`http://localhost:3000/requests/${requestId}`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        status: 'rejected',
+                        updatedAt: new Date().toISOString()
+                    })
+                });
+
+                if (!response.ok) throw new Error('Failed to reject request');
+                
+                await loadDashboardData();
+                showSuccess('Request rejected successfully');
+            } catch (error) {
+                showError('Failed to reject request: ' + error.message);
+            }
+        }
+
+        function loadProfileData() {
+            const user = JSON.parse(localStorage.getItem('user'));
+            document.getElementById('editFullName').value = user.fullName || '';
+            document.getElementById('editPhone').value = user.phone || '';
+            document.getElementById('editAddress').value = user.address || '';
+            document.getElementById('editBio').value = user.profile?.bio || '';
+        }
+
+        async function updateProfile() {
+            try {
+                const user = JSON.parse(localStorage.getItem('user'));
+                const updatedData = {
+                    fullName: document.getElementById('editFullName').value,
+                    phone: document.getElementById('editPhone').value,
+                    address: document.getElementById('editAddress').value,
+                    profile: {
+                        ...user.profile,
+                        fullName: document.getElementById('editFullName').value,
+                        phone: document.getElementById('editPhone').value,
+                        address: document.getElementById('editAddress').value,
+                        bio: document.getElementById('editBio').value
+                    }
+                };
+
+                const response = await fetch(`http://localhost:3000/users/${user.id}`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(updatedData)
+                });
+
+                if (!response.ok) throw new Error('Failed to update profile');
+
+                const updatedUser = await response.json();
+                localStorage.setItem('user', JSON.stringify(updatedUser));
+                
+                document.getElementById('userFullName').textContent = updatedUser.fullName;
+                
+                const modal = bootstrap.Modal.getInstance(document.getElementById('editProfileModal'));
+                modal.hide();
+                
+                showSuccess('Profile updated successfully');
+            } catch (error) {
+                showError('Failed to update profile: ' + error.message);
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('user');
+            localStorage.removeItem('token');
+            window.location.href = '/pages/login.html';
+        }
+
+        function showSuccess(message) {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = 'alert alert-success alert-dismissible fade show';
+            alertDiv.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            
+            document.querySelector('.container').insertAdjacentElement('afterbegin', alertDiv);
+            
+            setTimeout(() => alertDiv.remove(), 5000);
+        }
+
+        function showError(message) {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = 'alert alert-danger alert-dismissible fade show';
+            alertDiv.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            
+            document.querySelector('.container').insertAdjacentElement('afterbegin', alertDiv);
+            
+            setTimeout(() => alertDiv.remove(), 5000);
+        }
+
+        // Add event listeners for refreshing data
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'visible') {
+                loadDashboardData();
+            }
+        });
+
+        // Optional: Add auto-refresh every 5 minutes
+        setInterval(loadDashboardData, 300000);
+
+        // Handle mobile responsiveness
+        window.addEventListener('resize', () => {
+            const table = document.querySelector('.table-responsive');
+            if (window.innerWidth < 768) {
+                table.classList.add('table-sm');
+            } else {
+                table.classList.remove('table-sm');
+            }
+        });
+
+        // Initialize tooltips
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+    </script>
+</body>
+</html>

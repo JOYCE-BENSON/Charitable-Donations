@@ -1,0 +1,441 @@
+/* Global Styles */
+:root {
+    --primary-color: #4CAF50;
+    --secondary-color: #2196F3;
+    --text-color: #333;
+    --light-gray: #f8f9fa;
+    --dark-gray: #343a40;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+/* Navigation */
+.navbar {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.navbar-brand {
+    font-weight: bold;
+    color: var(--primary-color) !important;
+}
+
+.nav-link.btn {
+    padding: 0.5rem 1rem;
+    margin: 0 0.2rem;
+}
+
+/* Hero Section */
+.hero-section {
+    height: 100vh;
+    background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
+                url('../img/hero-bg.jpg') center/cover no-repeat;
+    color: white;
+    margin-top: -56px; /* Adjust for navbar height */
+}
+
+.hero-section h1 {
+    font-size: 3.5rem;
+    margin-bottom: 1rem;
+}
+
+.hero-section .lead {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+/* Feature Boxes */
+.feature-box {
+    padding: 2rem;
+    border-radius: 8px;
+    background: white;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+}
+
+.feature-box:hover {
+    transform: translateY(-5px);
+}
+
+.feature-icon {
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+/* Impact Section */
+.impact-number {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+}
+
+.impact-text {
+    font-size: 1.2rem;
+    color: var(--dark-gray);
+}
+
+/* Forms */
+.form-container {
+    max-width: 500px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.form-container h2 {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+/* Dashboard */
+.dashboard-container {
+    padding: 2rem;
+}
+
+.dashboard-card {
+    background: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.dashboard-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+/* Donation Cards */
+.donation-card {
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+}
+
+.donation-card:hover {
+    transform: translateY(-5px);
+}
+
+.donation-card .card-footer {
+    background: transparent;
+    border-top: 1px solid rgba(0,0,0,0.125);
+}
+
+/* Buttons */
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+    background-color: darken(var(--primary-color), 10%);
+    border-color: darken(var(--primary-color), 10%);
+}
+
+.btn-outline-primary {
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+/* Footer */
+footer {
+    background-color: var(--dark-gray);
+    color: white;
+}
+
+footer a {
+    color: rgba(255,255,255,0.8);
+    text-decoration: none;
+}
+
+footer a:hover {
+    color: white;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .hero-section h1 {
+        font-size: 2.5rem;
+    }
+    
+    .hero-section .lead {
+        font-size: 1.2rem;
+    }
+    
+    .impact-number {
+        font-size: 2rem;
+    }
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in {
+    animation: fadeIn 1s ease-out;
+}
+
+/* Additional Enhancements */
+
+/* Animated Buttons */
+.btn {
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn:after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: rgba(255,255,255,0.2);
+    transition: width 0.3s ease;
+}
+
+.btn:hover:after {
+    width: 100%;
+}
+
+/* Card Hover Effects */
+.card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+/* Input Focus Effects */
+.form-control, .form-select {
+    border: 1px solid #dee2e6;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.25rem rgba(76, 175, 80, 0.25);
+}
+
+/* Custom Checkboxes */
+.form-check-input {
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.form-check-input:checked {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+/* Progress Bars */
+.progress {
+    height: 10px;
+    border-radius: 5px;
+    background-color: rgba(0,0,0,0.1);
+}
+
+.progress-bar {
+    transition: width 0.6s ease;
+    background-color: var(--primary-color);
+}
+
+/* Loading Animations */
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Badge Styles */
+.badge {
+    padding: 0.5em 1em;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+}
+
+/* Table Styles */
+.table {
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.table th {
+    background-color: #f8f9fa;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.table td {
+    vertical-align: middle;
+}
+
+.table tbody tr {
+    transition: background-color 0.3s ease;
+}
+
+.table tbody tr:hover {
+    background-color: rgba(0,0,0,0.02);
+}
+
+/* Modal Animations */
+.modal.fade .modal-dialog {
+    transition: transform 0.3s ease-out;
+    transform: translate(0, -50px);
+}
+
+.modal.show .modal-dialog {
+    transform: none;
+}
+
+/* Alert Animations */
+.alert {
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Category Icons */
+.category-icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: rgba(0,0,0,0.1);
+    margin-bottom: 1rem;
+}
+
+.category-icon i {
+    font-size: 24px;
+    color: var(--primary-color);
+}
+
+/* Status Indicators */
+.status-indicator {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 5px;
+}
+
+.status-indicator.active {
+    background-color: #28a745;
+}
+
+.status-indicator.pending {
+    background-color: #ffc107;
+}
+
+.status-indicator.completed {
+    background-color: #007bff;
+}
+
+/* File Upload Styles */
+.file-upload {
+    position: relative;
+    overflow: hidden;
+    margin: 10px 0;
+}
+
+.file-upload input[type="file"] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    opacity: 0;
+    outline: none;
+    cursor: pointer;
+}
+
+.file-upload-label {
+    display: block;
+    padding: 1rem;
+    text-align: center;
+    border: 2px dashed #dee2e6;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+}
+
+.file-upload-label:hover {
+    border-color: var(--primary-color);
+}
+
+/* Responsive Improvements */
+@media (max-width: 768px) {
+    .card-body {
+        padding: 1rem;
+    }
+    
+    .table-responsive {
+        margin: 0 -1rem;
+    }
+    
+    .modal-dialog {
+        margin: 0.5rem;
+    }
+}
+
+/* Print Styles */
+@media print {
+    .navbar, .footer, .no-print {
+        display: none !important;
+    }
+    
+    .container {
+        width: 100%;
+        max-width: none;
+        padding: 0;
+    }
+    
+    .card {
+        border: none;
+        box-shadow: none;
+    }
+}

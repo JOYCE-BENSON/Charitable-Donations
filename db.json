@@ -1,0 +1,320 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "email": "donor@example.com",
+      "password": "123456",
+      "fullName": "James Mwangi",
+      "userType": "donor",
+      "phone": "0722123456",
+      "address": "Kileleshwa, Nairobi",
+      "createdAt": "2024-01-01T00:00:00.000Z",
+      "profile": {
+        "fullName": "James Mwangi",
+        "phone": "0722123456",
+        "address": "Kileleshwa, Nairobi",
+        "bio": "Business owner passionate about education"
+      }
+    },
+    {
+      "id": "2",
+      "email": "recipient@example.com",
+      "password": "123456",
+      "fullName": "Joyce Wambui",
+      "userType": "recipient",
+      "phone": "0711987654",
+      "address": "Kangemi, Nairobi",
+      "createdAt": "2024-01-01T00:00:00.000Z",
+      "profile": {
+        "fullName": "Joyce Wambui",
+        "phone": "0711987654",
+        "address": "Kangemi, Nairobi",
+        "bio": "Single mother of three seeking educational support"
+      }
+    },
+    {
+      "id": "3",
+      "email": "charity@example.com",
+      "password": "123456",
+      "fullName": "Peter Odhiambo",
+      "userType": "donor",
+      "phone": "0733445566",
+      "address": "Westlands, Nairobi",
+      "createdAt": "2024-01-02T00:00:00.000Z",
+      "profile": {
+        "fullName": "Peter Odhiambo",
+        "phone": "0733445566",
+        "address": "Westlands, Nairobi",
+        "bio": "NGO Director focused on healthcare initiatives"
+      }
+    },
+    {
+      "id": "4",
+      "email": "help@example.com",
+      "password": "123456",
+      "fullName": "Faith Njeri",
+      "userType": "recipient",
+      "phone": "0722334455",
+      "address": "Kayole, Nairobi",
+      "createdAt": "2024-01-02T00:00:00.000Z",
+      "profile": {
+        "fullName": "Faith Njeri",
+        "phone": "0722334455",
+        "address": "Kayole, Nairobi",
+        "bio": "Student seeking university fees support"
+      }
+    },
+    {
+      "id": "5",
+      "email": "support@example.com",
+      "password": "123456",
+      "fullName": "Abdul Hassan",
+      "userType": "donor",
+      "phone": "0722112233",
+      "address": "Parklands, Nairobi",
+      "createdAt": "2024-01-03T00:00:00.000Z",
+      "profile": {
+        "fullName": "Abdul Hassan",
+        "phone": "0722112233",
+        "address": "Parklands, Nairobi",
+        "bio": "Local business owner supporting community initiatives"
+      }
+    }
+  ],
+  "donations": [
+    {
+      "id": "1",
+      "donorId": "1",
+      "title": "University Scholarship Program",
+      "description": "Full scholarship for a promising student covering tuition and accommodation at any Kenyan university",
+      "amount": 150000,
+      "category": "education",
+      "status": "available",
+      "createdAt": "2024-01-01T00:00:00.000Z",
+      "requirements": {
+        "documentation": [
+          "KCSE Results",
+          "Admission Letter",
+          "Fee Structure"
+        ],
+        "verification": "Required",
+        "timeframe": "Urgent"
+      },
+      "location": {
+        "city": "Nairobi",
+        "country": "Kenya"
+      }
+    },
+    {
+      "id": "2",
+      "donorId": "3",
+      "title": "Medical Treatment Support",
+      "description": "Financial assistance for critical medical treatment at Kenyatta National Hospital",
+      "amount": 200000,
+      "category": "medical",
+      "status": "available",
+      "createdAt": "2024-01-02T00:00:00.000Z",
+      "requirements": {
+        "documentation": [
+          "Medical Reports",
+          "Hospital Bill",
+          "Doctor's Recommendation"
+        ],
+        "verification": "Required",
+        "timeframe": "Urgent"
+      },
+      "location": {
+        "city": "Nairobi",
+        "country": "Kenya"
+      }
+    },
+    {
+      "id": "3",
+      "donorId": "5",
+      "title": "Small Business Startup Grant",
+      "description": "Supporting young entrepreneurs to start small businesses in Nairobi",
+      "amount": 50000,
+      "category": "business",
+      "status": "available",
+      "createdAt": "2024-01-03T00:00:00.000Z",
+      "requirements": {
+        "documentation": [
+          "Business Plan",
+          "ID Copy",
+          "Budget Proposal"
+        ],
+        "verification": "Required",
+        "timeframe": "Flexible"
+      },
+      "location": {
+        "city": "Nairobi",
+        "country": "Kenya"
+      }
+    },
+    {
+      "id": "4",
+      "donorId": "1",
+      "title": "Secondary School Fees Support",
+      "description": "Term 1 school fees support for needy students",
+      "amount": 35000,
+      "category": "education",
+      "status": "available",
+      "createdAt": "2024-01-04T00:00:00.000Z",
+      "requirements": {
+        "documentation": [
+          "School Fee Structure",
+          "Previous Report Card",
+          "Parent/Guardian ID"
+        ],
+        "verification": "Required",
+        "timeframe": "Soon"
+      },
+      "location": {
+        "city": "Mombasa",
+        "country": "Kenya"
+      }
+    },
+    {
+      "id": "5",
+      "donorId": "3",
+      "title": "Drought Relief Support",
+      "description": "Emergency food support for families affected by drought in Turkana",
+      "amount": 100000,
+      "category": "disaster",
+      "status": "available",
+      "createdAt": "2024-01-05T00:00:00.000Z",
+      "requirements": {
+        "documentation": [
+          "Local Chief's Letter",
+          "ID Copy",
+          "Family Details"
+        ],
+        "verification": "Required",
+        "timeframe": "Urgent"
+      },
+      "location": {
+        "city": "Lodwar",
+        "country": "Kenya"
+      }
+    },
+    {
+      "id": "6",
+      "donorId": "5",
+      "title": "Women's Group Funding",
+      "description": "Supporting women's table banking initiative in Kisumu",
+      "amount": 75000,
+      "category": "business",
+      "status": "available",
+      "createdAt": "2024-01-06T00:00:00.000Z",
+      "requirements": {
+        "documentation": [
+          "Group Registration",
+          "Project Proposal",
+          "Member List"
+        ],
+        "verification": "Required",
+        "timeframe": "Flexible"
+      },
+      "location": {
+        "city": "Kisumu",
+        "country": "Kenya"
+      }
+    }
+  ],
+  "requests": [
+    {
+      "id": "1",
+      "userId": "2",
+      "donationId": "1",
+      "status": "approved",
+      "message": "Seeking support for my daughter's university education at UoN",
+      "documents": [
+        {
+          "type": "academic_records",
+          "url": "path/to/document",
+          "uploadedAt": "2024-01-02T00:00:00.000Z"
+        }
+      ],
+      "createdAt": "2024-01-02T00:00:00.000Z",
+      "updatedAt": "2024-01-03T00:00:00.000Z"
+    },
+    {
+      "id": "2",
+      "userId": "4",
+      "donationId": "2",
+      "status": "pending",
+      "message": "Need urgent medical support for kidney treatment",
+      "documents": [
+        {
+          "type": "medical_report",
+          "url": "path/to/document",
+          "uploadedAt": "2024-01-03T00:00:00.000Z"
+        }
+      ],
+      "createdAt": "2024-01-03T00:00:00.000Z",
+      "updatedAt": "2024-01-03T00:00:00.000Z"
+    }
+  ],
+  "transactions": [
+    {
+      "id": "1",
+      "donationId": "1",
+      "donorId": "1",
+      "recipientId": "2",
+      "requestId": "1",
+      "amount": 150000,
+      "status": "completed",
+      "createdAt": "2024-01-03T00:00:00.000Z",
+      "completedAt": "2024-01-03T00:00:00.000Z"
+    }
+  ],
+  "messages": [
+    {
+      "id": "1",
+      "senderId": "1",
+      "receiverId": "2",
+      "donationId": "1",
+      "content": "Your request has been approved. We'll process the payment to the university directly.",
+      "createdAt": "2024-01-03T00:00:00.000Z",
+      "read": false
+    }
+  ],
+  "categories": [
+    {
+      "id": "1",
+      "name": "Medical",
+      "description": "Support for medical treatments and healthcare needs",
+      "icon": "medical-icon"
+    },
+    {
+      "id": "2",
+      "name": "Education",
+      "description": "School fees and educational support",
+      "icon": "education-icon"
+    },
+    {
+      "id": "3",
+      "name": "Disaster Relief",
+      "description": "Emergency support for natural disasters",
+      "icon": "disaster-icon"
+    },
+    {
+      "id": "4",
+      "name": "Business",
+      "description": "Support for small businesses and entrepreneurs",
+      "icon": "business-icon"
+    },
+    {
+      "id": "5",
+      "name": "Food Security",
+      "description": "Support for food and nutrition needs",
+      "icon": "food-icon"
+    },
+    {
+      "id": "6",
+      "name": "Housing",
+      "description": "Housing and shelter support",
+      "icon": "housing-icon"
+    }
+  ]
+}
